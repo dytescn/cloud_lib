@@ -17,7 +17,7 @@ DeepSeek 文本对话插件。Rust `cdylib`，通过 cyctron 的 `/libdeepseek` 
 
 ## 配置
 
-`setup.ts` 通过 `info_lib` 写入以下 `setting` key：
+`setup.json` 通过 `info_lib` 写入以下 `setting` key：
 
 | key | 说明 | 默认值 |
 | --- | --- | --- |

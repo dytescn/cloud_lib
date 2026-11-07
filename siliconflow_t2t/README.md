@@ -17,7 +17,7 @@ SiliconFlow 文本对话插件。Rust `cdylib`，通过 cyctron 的 `/libsilicon
 
 ## 配置
 
-`setup.ts` 通过 `info_lib` 写入以下 `setting` key：
+`setup.json` 通过 `info_lib` 写入以下 `setting` key：
 
 | key | 说明 | 初始化值 |
 | --- | --- | --- |
@@ -30,7 +30,7 @@ SiliconFlow 文本对话插件。Rust `cdylib`，通过 cyctron 的 `/libsilicon
 | `silicon_app_topk` | Top-K | `40` |
 | `silicon_app_system_prompt` | system 提示词 | 由 setting 读取 |
 
-未配置时源码默认 `top_k = 50`；`setup.ts` 初始值为 `40`。
+未配置时源码默认 `top_k = 50`；`setup.json` 初始值为 `40`。
 
 ## 请求
 
