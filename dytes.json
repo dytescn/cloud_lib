@@ -1,5 +1,5 @@
 {
-  "name": "cloud",
+  "name": "cloud_lib",
   "uuid": "a27707a7-8287-4a9e-bc45-447d8b466654",
   "version": "1.0.0",
   "description": "cloud LLM providers for Piksel (DeepSeek / SiliconFlow)",
@@ -18,15 +18,15 @@
   },
   "platform-exports": {
     "windows": {
-      "./target/release/cloud.dll": "libcloud.dll",
+      "./target/release/cloud_lib.dll": "cloud_lib.dll",
       "./setup.json": "setup.json"
     },
     "linux": {
-      "./target/release/libcloud.so": "libcloud.so",
+      "./target/release/libcloud_lib.so": "cloud_lib.so",
       "./setup.json": "setup.json"
     },
     "macos": {
-      "./target/release/libcloud.dylib": "libcloud.dylib",
+      "./target/release/libcloud_lib.dylib": "cloud_lib.dylib",
       "./setup.json": "setup.json"
     }
   },

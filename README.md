@@ -1,8 +1,8 @@
-# cloud
+# cloud_lib
 
-`cloud` 是 Piksel 的统一云端大模型调用库。Rust `cdylib`，由宿主通过
-`POST /cloud` + `FFI-Symbol: chat` 调用，也可以由 chatllm 直接 `dlopen`
-`./libary/libcloud.{dll,so,dylib}`。
+`cloud_lib` 是 Piksel 的统一云端大模型调用库。Rust `cdylib`，由宿主通过
+`POST /cloud_lib` + `FFI-Symbol: chat` 调用，也可以由 chatllm 直接 `dlopen`
+`./libary/cloud_lib.{dll,so,dylib}`。
 
 它合并了原先 `deepseek` 与 `siliconflow_t2t` 两个系统库的调用实现，并接管
 「按 `ai_supplier` 选择供应商」的分发逻辑，对外只暴露一个 FFI 入口 `post_chat`。
@@ -11,10 +11,10 @@
 
 | 项 | 内容 |
 | --- | --- |
-| 仓库 | `dytescn/cloud` |
-| 包名 / 类型 | `cloud` / `sys` |
+| 仓库 | `dytescn/cloud_lib` |
+| 包名 / 类型 | `cloud_lib` / `sys` |
 | 版本 | `1.0.0` |
-| 产物 | Windows `libcloud.dll`、Linux `libcloud.so`、macOS `libcloud.dylib` |
+| 产物 | Windows `cloud_lib.dll`、Linux `cloud_lib.so`、macOS `cloud_lib.dylib` |
 | 入口 | `post_chat` |
 | 依赖 | `database`（读 `info.db.setting`）、`info_lib`（`setup.json` 写入配置） |
 | 配置前缀 | `deepseek_app_*` / `silicon_app_*` |
@@ -127,7 +127,7 @@ cargo test
 `libdeepseek` / `libsiliconflow_t2t`。现在：
 
 - 供应商实现统一收口到本库；
-- `chatllm` 只加载 `libcloud`，不再感知具体供应商库；
+- `chatllm` 只加载 `cloud_lib`，不再感知具体供应商库；
 - 原 `deepseek` / `siliconflow_t2t` 包已被本包取代，源码从 `dytescn/chat_plugins` 移除。
 
 接口细节见 [docs/ffi.md](docs/ffi.md)。

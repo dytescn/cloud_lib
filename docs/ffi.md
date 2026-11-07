@@ -1,6 +1,6 @@
-# cloud FFI
+# cloud_lib FFI
 
-`cloud` 编译为 `cdylib`，由宿主通过 `POST /cloud` + `FFI-Symbol: chat`
+`cloud_lib` 编译为 `cdylib`，由宿主通过 `POST /cloud_lib` + `FFI-Symbol: chat`
 调用（cyctron 会查找 `libary/` 下对应动态库并拼接 `post_` 前缀），
 或者由 chatllm 直接 `dlopen`。运行时 cwd 为安装根目录，`./libary`、
 `./database` 均相对该目录解析。
