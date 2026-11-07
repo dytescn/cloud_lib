@@ -128,6 +128,13 @@ cargo test
 
 - 供应商实现统一收口到本库；
 - `chatllm` 只加载 `cloud_lib`，不再感知具体供应商库；
-- 原 `deepseek` / `siliconflow_t2t` 包已被本包取代，源码从 `dytescn/chat_plugins` 移除。
+- 原 `deepseek` / `siliconflow_t2t` 包从 `dytescn/chat_plugins` 移出，源码归档在
+  本仓库的 `deepseek/` 与 `siliconflow_t2t/` 目录。
+
+## 历史实现
+
+`deepseek/` 与 `siliconflow_t2t/` 是迁移前的独立包源码，随本仓库保留用于对照与追溯；
+它们不参与根项目 `cloud_lib` 的构建，也不进入 `dytes.json` 的发布产物。当前统一实现见
+`src/provider/`。
 
 接口细节见 [docs/ffi.md](docs/ffi.md)。
