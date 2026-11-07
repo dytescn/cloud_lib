@@ -111,8 +111,6 @@ int post_chat(const char *json_in, char *json_out);
 | `400102` | `prompt` / `messages` 没有有效内容 |
 | `500101` | 读取配置、HTTP 调用或响应解析失败 |
 | `500201` | 读取 `info.db.setting` 失败 |
-| `500900` | `json_out` 为空 |
-| `500901` | 响应超过 64 KiB |
 
 ## 构建与测试
 

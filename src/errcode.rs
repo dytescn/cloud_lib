@@ -23,10 +23,6 @@ pub const ERR_CHAT_REQUEST_FAILED: i32 = 500101;
 pub const ERR_SETTING_DB: i32 = 500201;
 pub const ERR_SETTING_MISSING_KEY: i32 = 500202;
 
-// 输出缓冲（5009xx）
-pub const ERR_JSON_OUT_NULL: i32 = 500900;
-pub const ERR_JSON_OUT_TOO_LARGE: i32 = 500901;
-
 pub fn default_message(code: i32) -> &'static str {
     match code {
         OK => "success",
@@ -38,8 +34,6 @@ pub fn default_message(code: i32) -> &'static str {
         ERR_CHAT_REQUEST_FAILED => "chat request failed",
         ERR_SETTING_DB => "read setting failed",
         ERR_SETTING_MISSING_KEY => "setting key is missing",
-        ERR_JSON_OUT_NULL => "json_out is null",
-        ERR_JSON_OUT_TOO_LARGE => "json output exceeds buffer size",
         _ => "unknown error",
     }
 }
