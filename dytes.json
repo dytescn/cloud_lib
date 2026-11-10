@@ -1,7 +1,7 @@
 {
   "name": "cloud_lib",
   "uuid": "a27707a7-8287-4a9e-bc45-447d8b466654",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "cloud LLM providers for Piksel (DeepSeek / SiliconFlow)",
   "keywords": [
     "cloud",
@@ -13,8 +13,8 @@
   "author": "funxdata",
   "type": "sys",
   "dependencies-sys": {
-    "database": "1.0.3",
-    "info_lib": "0.1.2"
+    "database": "1.0.4",
+    "info_lib": "0.1.3"
   },
   "platform-exports": {
     "windows": {
