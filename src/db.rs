@@ -16,7 +16,8 @@ const DB_PATH: &str = "./libary/database.dylib";
 
 /// 逻辑库名；database 内部会拼成 `./database/info.db`。
 const DB_NAME: &str = "info";
-const OUT_BUF_SIZE: usize = 65536;
+/// database 1.0.5+ 约定 `json_out` 至少 1 MiB。
+const OUT_BUF_SIZE: usize = 1024 * 1024;
 
 type PostDbQueryFn = unsafe extern "C" fn(*const c_char, *mut c_char) -> c_int;
 
@@ -26,8 +27,8 @@ static DB_QUERY_FN: OnceLock<PostDbQueryFn> = OnceLock::new();
 fn load_db_query() -> Result<PostDbQueryFn> {
     let lib = unsafe { Library::new(DB_PATH) }.with_context(|| format!("加载 {} 失败", DB_PATH))?;
     let function = unsafe {
-        *lib.get::<PostDbQueryFn>(b"post_db_query")
-            .context("dlsym post_db_query 失败")?
+        *lib.get::<PostDbQueryFn>(b"db_query")
+            .context("dlsym db_query 失败")?
     };
     let _ = DB_LIB.set(lib);
     Ok(function)
