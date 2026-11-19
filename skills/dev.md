@@ -18,7 +18,7 @@
 - 不能自行新增 FFI 方法。
 - 需要新增或重命名接口时，先停止改动并交由人工确认。
 - 对外 `json_out` 缓冲区约定见 [ffi-buffer.md](./ffi-buffer.md)：
-  对外 64 KiB，调用 `database` 时 1 MiB，两者不得共用常量。
+  对外 1 MiB，调用 `database` / `plugin_lib` 时 1 MiB，各自使用独立常量。
 - 响应结构固定为 `{ code, msg, data }`，成功 / 失败语义变更需人工确认。
 
 ## 错误码

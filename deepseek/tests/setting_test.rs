@@ -6,20 +6,59 @@ use deepseek::utils::setting::{build_chat_config, build_params_from_config, Chat
 #[test]
 fn test_build_chat_config_full() {
     let mut m = HashMap::new();
-    m.insert("deepseek_app_key".to_string(), "sk-test".to_string());
-    m.insert(
-        "deepseek_app_system_prompt".to_string(),
-        "你是助手".to_string(),
-    );
-    m.insert(
-        "deepseek_app_model".to_string(),
-        "deepseek-flash".to_string(),
-    );
+    for (key, value) in [
+        ("deepseek_app_key", "sk-test"),
+        ("deepseek_app_base_url", "https://api.deepseek.com/anthropic"),
+        ("deepseek_app_model", "deepseek-flash"),
+        ("deepseek_app_max_tokens", "4096"),
+        ("deepseek_app_temperature", "0.7"),
+        ("deepseek_app_system_prompt", "你是助手"),
+        ("deepseek_app_thinking", "disabled"),
+        ("deepseek_app_reasoning_effort", "high"),
+    ] {
+        m.insert(key.to_string(), value.to_string());
+    }
 
     let cfg = build_chat_config(&m).expect("配置解析失败");
     assert_eq!(cfg.api_key, "sk-test");
     assert_eq!(cfg.system_prompt, Some("你是助手".to_string()));
     assert_eq!(cfg.model, "deepseek-flash");
+    assert_eq!(cfg.max_tokens, 4096);
+    assert_eq!(cfg.temperature, 0.7);
+    assert_eq!(cfg.thinking.kind, "disabled");
+    assert_eq!(cfg.reasoning_effort, Some("high".to_string()));
+}
+
+#[test]
+fn test_build_chat_config_requires_every_field() {
+    let mut m = HashMap::new();
+    for (key, value) in [
+        ("deepseek_app_key", "sk-test"),
+        ("deepseek_app_base_url", "https://api.deepseek.com/anthropic"),
+        ("deepseek_app_model", "deepseek-flash"),
+        ("deepseek_app_max_tokens", "4096"),
+        ("deepseek_app_temperature", "0.7"),
+        ("deepseek_app_system_prompt", "你是助手"),
+        ("deepseek_app_thinking", "disabled"),
+        ("deepseek_app_reasoning_effort", "high"),
+    ] {
+        m.insert(key.to_string(), value.to_string());
+    }
+
+    for key in [
+        "deepseek_app_key",
+        "deepseek_app_base_url",
+        "deepseek_app_model",
+        "deepseek_app_max_tokens",
+        "deepseek_app_temperature",
+        "deepseek_app_system_prompt",
+        "deepseek_app_thinking",
+        "deepseek_app_reasoning_effort",
+    ] {
+        let mut missing = m.clone();
+        missing.remove(key);
+        assert!(build_chat_config(&missing).is_err(), "{key} 缺失时应报错");
+    }
 }
 
 #[test]

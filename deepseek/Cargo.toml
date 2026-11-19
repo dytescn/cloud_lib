@@ -1,6 +1,6 @@
 [package]
 name = "deepseek"
-version = "0.1.0"
+version = "1.0.1"
 edition = "2021"
 
 # 核心：指定编译为 动态库 + C ABI 兼容

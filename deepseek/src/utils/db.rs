@@ -28,8 +28,13 @@ fn load_db_query() -> Result<PostDbQueryFn> {
     let lib =
         unsafe { Library::new(DB_SO_PATH) }.with_context(|| format!("加载 {} 失败", DB_SO_PATH))?;
     let f = unsafe {
-        *lib.get::<PostDbQueryFn>(b"post_db_query")
-            .context("dlsym post_db_query 失败")?
+        // database 1.0.5+ 导出 db_query；旧版本导出 post_db_query，两者都兼容。
+        match lib.get::<PostDbQueryFn>(b"db_query") {
+            Ok(f) => *f,
+            Err(_) => *lib
+                .get::<PostDbQueryFn>(b"post_db_query")
+                .context("dlsym db_query / post_db_query 失败")?,
+        }
     };
     let _ = DB_LIB.set(lib);
     eprintln!("[db] 加载 {} 成功", DB_SO_PATH);

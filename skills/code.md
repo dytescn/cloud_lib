@@ -13,12 +13,14 @@
 src/
 ├── lib.rs
 ├── ffi/
-│   └── mod.rs
+│   ├── mod.rs
+│   └── chat.rs
 └── utils/
     ├── mod.rs
     ├── db.rs
     ├── errcode.rs
     ├── json.rs
+    ├── plugin.rs
     ├── setting.rs
     └── supplier.rs
 ```
@@ -39,6 +41,7 @@ pub mod utils;
 pub mod db;
 pub mod errcode;
 pub mod json;
+pub mod plugin;
 pub mod setting;
 pub mod supplier;
 ```
@@ -50,7 +53,7 @@ pub mod db;
 
 pub fn load() { /* 逻辑代码 */ }
 
-pub const OUT_BUF_SIZE: usize = 65536;
+pub const OUT_BUF_SIZE: usize = 1024 * 1024;
 ```
 
 需要对外暴露的条目用 `pub use` 重导出，实现仍放在独立文件中。

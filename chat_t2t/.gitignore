@@ -27,3 +27,6 @@ rustc-ice-*.txt
 # Added by cargo
 
 /target
+
+# dytes 测试环境
+.dytes/

@@ -2,12 +2,8 @@
   "version": 1,
   "requests": [
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "silicon_app_key",
         "title": "应用 Key",
@@ -25,12 +21,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "silicon_app_base_url",
         "title": "API 地址",
@@ -48,12 +40,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "silicon_app_model",
         "title": "默认模型",
@@ -71,12 +59,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "silicon_app_max_tokens",
         "title": "最大 Tokens",
@@ -94,12 +78,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "silicon_app_temperature",
         "title": "温度",
@@ -117,12 +97,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "silicon_app_top_p",
         "title": "TopP",
@@ -140,12 +116,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "silicon_app_topk",
         "title": "TopK",
@@ -163,133 +135,148 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
-        "key": "silicon_app_key",
+        "key": "silicon_app_system_prompt",
+        "title": "System 提示词",
+        "value": "你是一个乐于助人的中文 AI 助手。",
+        "value_type": "string",
+        "category": "silicon_info",
+        "description": "顶层 system 字段",
         "note": {
           "key": "silicon_info",
           "language": "default",
           "title": "硅基配置",
           "description": "硅基流动 API 相关配置"
         }
+      },
+      "allow_error": true
+    },
+    {
+      "library": "info_lib",
+      "symbol": "info_post",
+      "body": {
+        "key": "ai_supplier",
+        "title": "AI 对话供应商",
+        "value": "c8b1acac-2b36-463b-84f7-c2170d31ab63",
+        "value_type": "enum",
+        "category": "ai_supplier",
+        "description": "插件 uuid：deepseek=c39f6e4d-042a-4b3e-bc8d-2a7c3336736c；siliconflow_t2t=c8b1acac-2b36-463b-84f7-c2170d31ab63",
+        "note": {
+          "key": "ai_supplier",
+          "language": "default",
+          "title": "AI 供应商",
+          "description": "AI 供应商插件设置"
+        }
+      },
+      "allow_error": true
+    },
+    {
+      "library": "info_lib",
+      "symbol": "info_update",
+      "body": {
+        "key": "ai_supplier",
+        "value": "c8b1acac-2b36-463b-84f7-c2170d31ab63"
+      },
+      "allow_error": true
+    },
+    {
+      "library": "info_lib",
+      "symbol": "info_update",
+      "body": {
+        "key": "silicon_app_key",
+        "note": {
+          "key": "silicon_info",
+          "language": "en",
+          "title": "Silicon Info",
+          "description": "SiliconFlow API settings"
+        }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "silicon_app_base_url",
         "note": {
           "key": "silicon_info",
-          "language": "default",
-          "title": "硅基配置",
-          "description": "硅基流动 API 相关配置"
+          "language": "en",
+          "title": "Silicon Info",
+          "description": "SiliconFlow API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "silicon_app_model",
         "note": {
           "key": "silicon_info",
-          "language": "default",
-          "title": "硅基配置",
-          "description": "硅基流动 API 相关配置"
+          "language": "en",
+          "title": "Silicon Info",
+          "description": "SiliconFlow API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "silicon_app_max_tokens",
         "note": {
           "key": "silicon_info",
-          "language": "default",
-          "title": "硅基配置",
-          "description": "硅基流动 API 相关配置"
+          "language": "en",
+          "title": "Silicon Info",
+          "description": "SiliconFlow API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "silicon_app_temperature",
         "note": {
           "key": "silicon_info",
-          "language": "default",
-          "title": "硅基配置",
-          "description": "硅基流动 API 相关配置"
+          "language": "en",
+          "title": "Silicon Info",
+          "description": "SiliconFlow API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "silicon_app_top_p",
         "note": {
           "key": "silicon_info",
-          "language": "default",
-          "title": "硅基配置",
-          "description": "硅基流动 API 相关配置"
+          "language": "en",
+          "title": "Silicon Info",
+          "description": "SiliconFlow API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "silicon_app_topk",
         "note": {
           "key": "silicon_info",
-          "language": "default",
-          "title": "硅基配置",
-          "description": "硅基流动 API 相关配置"
+          "language": "en",
+          "title": "Silicon Info",
+          "description": "SiliconFlow API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
-        "key": "silicon_app_key",
+        "key": "silicon_app_system_prompt",
         "note": {
           "key": "silicon_info",
           "language": "en",

@@ -6,7 +6,7 @@
 
 | 调用方向 | 示例 | 约定 |
 | --- | --- | --- |
-| 对外 FFI | `cyctron` / `chatllm` → `cloud_lib` | **64 KiB** |
+| 对外 FFI | `cyctron` / `chatllm` → `cloud_lib` | **1024 KiB** |
 | 库与库之间 | `cloud_lib` → `database` | **1024 KiB**，可按依赖约定扩大 |
 
 两类缓冲区**不得共用同一个常量**。修改库间缓冲区属于 FFI 契约调整，
@@ -16,12 +16,13 @@
 
 | 调用 | 常量位置 | 当前值 | 说明 |
 | --- | --- | --- | --- |
-| 对外 FFI | `src/utils/json.rs` `OUT_BUF_SIZE` | 64 KiB | 调用方分配；不足时返回 `-2` |
+| 对外 FFI | `src/utils/json.rs` `OUT_BUF_SIZE` | 1024 KiB | 调用方分配；不足时返回 `-2` |
 | `cloud_lib` → `database` | `src/utils/db.rs` `OUT_BUF_SIZE` | 1024 KiB | database 1.0.5+ 约定至少 1 MiB |
+| `cloud_lib` → `plugin_lib` / 插件 | `src/utils/plugin.rs` `OUT_BUF_SIZE` | 1024 KiB | 查询插件信息、调用插件 `post_chat` |
 
 ## 3. 修改约定
 
 1. 缓冲区变更先确认对端库的最大响应，再调整常量；
-2. 对外 FFI 的 64 KiB 约定不要被库间缓冲区误改；
+2. 对外 FFI 与库间缓冲区目前同为 1 MiB，但仍使用独立常量，不要合并；
 3. 变更时同步更新本节表格与 `README.md`；
 4. 增加边界测试：接近上限、超过上限、对端返回超大响应的场景。

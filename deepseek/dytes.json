@@ -1,17 +1,24 @@
 {
   "name": "deepseek",
   "uuid": "c39f6e4d-042a-4b3e-bc8d-2a7c3336736c",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "deepseek api",
   "keywords": [
     "deepseek api",
     "deepseek"
   ],
   "author": "funxdata",
-  "type": "sys",
+  "type": "plugins",
+  "plugins_type": "sys_plugins",
+  "target": "common",
+  "use_ai": 0,
+  "dependencies-sys": {
+    "database": "1.0.6",
+    "info_lib": "0.1.4"
+  },
   "platform-exports": {
     "windows": {
-      "./target/release/deepseek.dll": "libdeepseek.dll",
+      "./target/release/deepseek.dll": "deepseek.dll",
       "./setup.json": "setup.json"
     },
     "linux": {
@@ -25,8 +32,5 @@
   },
   "init": [
     "./setup.json"
-  ],
-  "dependencies-sys": {
-    "info_lib": "0.1.0"
-  }
+  ]
 }

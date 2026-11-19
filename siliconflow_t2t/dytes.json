@@ -1,20 +1,24 @@
 {
   "name": "siliconflow_t2t",
   "uuid": "c8b1acac-2b36-463b-84f7-c2170d31ab63",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "siliconflow api",
   "keywords": [
     "siliconflow api",
     "siliconflow"
   ],
   "author": "funxdata",
-  "type": "sys",
-  "init": [
-    "./setup.json"
-  ],
+  "type": "plugins",
+  "plugins_type": "sys_plugins",
+  "target": "common",
+  "use_ai": 0,
+  "dependencies-sys": {
+    "database": "1.0.6",
+    "info_lib": "0.1.4"
+  },
   "platform-exports": {
     "windows": {
-      "./target/release/siliconflow_t2t.dll": "libsiliconflow_t2t.dll",
+      "./target/release/siliconflow_t2t.dll": "siliconflow_t2t.dll",
       "./setup.json": "setup.json"
     },
     "linux": {
@@ -26,7 +30,7 @@
       "./setup.json": "setup.json"
     }
   },
-  "dependencies-sys": {
-    "info_lib": "0.1.0"
-  }
+  "init": [
+    "./setup.json"
+  ]
 }

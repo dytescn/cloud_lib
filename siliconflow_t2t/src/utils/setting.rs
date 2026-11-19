@@ -8,9 +8,6 @@ use anyhow::Result;
 use crate::utils::db::db_query;
 use crate::utils::siliconflow::{ChatParams, Message, Thinking};
 
-const DEFAULT_API_URL: &str = "https://api.siliconflow.cn/v1";
-const DEFAULT_MODEL: &str = "Qwen/Qwen2.5-7B-Instruct";
-
 // ============ SQL 转义 ============
 
 pub(crate) fn esc(val: &str) -> String {
@@ -166,35 +163,40 @@ pub fn load_chat_config_sync() -> Result<ChatConfig> {
     build_chat_config(&map)
 }
 
+/// 读取必填配置项；缺失或为空时报错，不使用默认值。
+fn required(map: &HashMap<String, String>, key: &str) -> Result<String> {
+    map.get(key)
+        .filter(|value| !value.trim().is_empty())
+        .cloned()
+        .ok_or_else(|| anyhow::anyhow!("缺少配置 {}", key))
+}
+
+fn required_number(map: &HashMap<String, String>, key: &str) -> Result<f64> {
+    let value = required(map, key)?;
+    value
+        .parse::<f64>()
+        .map_err(|_| anyhow::anyhow!("配置 {} 不是有效数字: {}", key, value))
+}
+
+fn required_u32(map: &HashMap<String, String>, key: &str) -> Result<u32> {
+    let value = required_number(map, key)?;
+    if !(0.0..=u32::MAX as f64).contains(&value) {
+        anyhow::bail!("配置 {} 超出范围: {}", key, value);
+    }
+    Ok(value as u32)
+}
+
 /// 纯函数：从 map 组装 ChatConfig（便于测试）
 pub fn build_chat_config(map: &HashMap<String, String>) -> Result<ChatConfig> {
-    let api_key = map
-        .get("silicon_app_key")
-        .filter(|s| !s.is_empty())
-        .cloned()
-        .ok_or_else(|| anyhow::anyhow!("silicon_app_key 未配置"))?;
-
-    let base_url = map_or(map, "silicon_app_base_url", DEFAULT_API_URL);
-    let model = map_or(map, "silicon_app_model", DEFAULT_MODEL);
-    let max_tokens = map_number(map, "silicon_app_max_tokens", 4096.0) as u32;
-    let temperature = map_number(map, "silicon_app_temperature", 0.7);
-    let top_p = map_number(map, "silicon_app_top_p", 0.7);
-    let top_k = map_number(map, "silicon_app_topk", 50.0) as u32;
-
-    let system_prompt = map
-        .get("silicon_app_system_prompt")
-        .filter(|s| !s.is_empty())
-        .cloned();
-
     Ok(ChatConfig {
-        api_key,
-        base_url,
-        model,
-        max_tokens,
-        temperature,
-        top_p,
-        top_k,
-        system_prompt,
+        api_key: required(map, "silicon_app_key")?,
+        base_url: required(map, "silicon_app_base_url")?,
+        model: required(map, "silicon_app_model")?,
+        max_tokens: required_u32(map, "silicon_app_max_tokens")?,
+        temperature: required_number(map, "silicon_app_temperature")?,
+        top_p: required_number(map, "silicon_app_top_p")?,
+        top_k: required_u32(map, "silicon_app_topk")?,
+        system_prompt: Some(required(map, "silicon_app_system_prompt")?),
     })
 }
 

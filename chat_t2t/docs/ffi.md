@@ -5,6 +5,13 @@
 或者由 chatllm 直接 `dlopen`。运行时 cwd 为安装根目录，`./libary`、
 `./database` 均相对该目录解析。
 
+`chat_t2t` 的处理流程：
+
+1. 读取 `info.db.setting.ai_supplier`（插件 uuid），未设置或为空时返回 `500202`；
+2. 调用 `plugin_lib` 的 `get_plugins` 按 uuid 读取插件信息（`name` / `install_path`）；
+3. 按安装约定加载插件动态库，把 `json_in` 原样传给插件的 `post_chat`，
+   并把插件响应原样写入 `json_out`。
+
 ## 1. 调用约定
 
 ```c
@@ -14,15 +21,17 @@ int (*)(const char *json_in, char *json_out);
 | 约定 | 说明 |
 | --- | --- |
 | 输入 | NUL 结尾的 UTF-8 JSON |
-| 输出 | 调用方提供 65,536 字节缓冲区（含结尾 NUL）；超限返回 `-2` |
+| 输出 | 调用方提供 1,048,576 字节缓冲区（含结尾 NUL）；超限返回 `-2` |
 | 返回值 | `0` 已写入；`-1` 输出指针为空；`-2` 缓冲区不足 |
 | 响应 | `{"code":0,"msg":"success","data":{...}}`；失败 `{"code":<错误码>,"msg":"<原因>","data":{}}` |
 
 ## 2. 请求
 
+`cloud_lib` 不解析、不改写请求，`json_in` 原样转发给所选插件。下表是供应商插件
+的请求约定，供参考：
+
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `supplier` | string | 否 | `deepseek` / `siliconflow_t2t`；缺省读 `ai_supplier` |
 | `prompt` | string | 二选一 | 单轮输入 |
 | `messages` | array | 二选一 | `{role, content}`；非空时优先于 `prompt` |
 | `system` | string | 否 | 请求级 system；缺省读 `<supplier>_app_system_prompt` |
@@ -40,11 +49,11 @@ int (*)(const char *json_in, char *json_out);
 1. `messages` 非空时使用 `messages`，忽略 `prompt`；
 2. `messages` 为空时回落 `prompt`，自动构造一条 user 消息；
 3. 两者都没有有效内容返回 `400102`；
-4. `system` 优先级：请求 `system` > 设置；首条已是 system 时不重复插入；
-5. 未显式传 `supplier` 时读取 `info.db.setting.ai_supplier`，空值 / 未知值回退
-   `deepseek`。
+4. `system` 优先级：请求 `system` > 设置；首条已是 system 时不重复插入。
 
 ## 3. 响应
+
+响应由插件返回，`cloud_lib` 原样透传。以下为供应商插件的响应示例：
 
 ```json
 {

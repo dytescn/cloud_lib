@@ -4,8 +4,9 @@
 `POST /cloud_lib` + `FFI-Symbol: chat_t2t` 调用，也可以由 chatllm 直接 `dlopen`
 `./libary/cloud_lib.{dll,so,dylib}`。
 
-它接管「按 `ai_supplier` 选择供应商」的职责，对外只暴露一个 FFI 入口 `chat_t2t`。
-当前版本暂不提供 chat 调用，调用会返回业务错误 `500101`。
+它接管「按 `ai_supplier` 选择插件」的职责，对外只暴露一个 FFI 入口 `chat_t2t`：
+读取 `setting.ai_supplier`（插件 uuid）→ 通过 `plugin_lib` 读取插件信息 →
+加载插件动态库并调用其 `post_chat`，把插件响应原样返回。
 
 ## 包信息
 
@@ -16,8 +17,8 @@
 | 版本 | `1.0.0` |
 | 产物 | Windows `cloud_lib.dll`、Linux `cloud_lib.so`、macOS `cloud_lib.dylib` |
 | 入口 | `chat_t2t` |
-| 依赖 | `database`（读 `info.db.setting`）、`info_lib`（`setup.json` 写入配置） |
-| 配置前缀 | `deepseek_app_*` / `silicon_app_*` |
+| 依赖 | `database`（读 `info.db.setting`）、`plugin_lib`（查插件信息）、`info_lib`（`setup.json` 写入配置） |
+| 配置项 | `ai_supplier`（插件 uuid） / `ai_supplier_plugin_uuid`（注册参数） |
 
 ## 调用方式
 
@@ -25,12 +26,12 @@
 int chat_t2t(const char *json_in, char *json_out);
 ```
 
-- `json_in`：UTF-8 JSON；
-- `json_out`：调用方提供 64 KiB 缓冲区；
+- `json_in`：UTF-8 JSON，**原样转发**给插件；
+- `json_out`：调用方提供 1 MiB 缓冲区；
 - 返回 `0` 表示已写入；`-1` 输出指针为空；`-2` 缓冲区不足；
-- 业务结果在响应 JSON 的 `code` 中。
+- 业务结果以插件响应为准，插件应返回 `{ code, msg, data }` 结构。
 
-请求：
+请求示例（字段由插件约定）：
 
 ```json
 {
@@ -49,14 +50,8 @@ int chat_t2t(const char *json_in, char *json_out);
 }
 ```
 
-- `supplier`：可选，`deepseek` / `siliconflow_t2t`；缺省读取
-  `info.db.setting.ai_supplier`，未配置时回退 `deepseek`；
-- `prompt` 与 `messages` 至少提供一个；`messages` 优先；
-- 其余字段均为可选，未传时使用对应供应商的设置；
-- `top_p` / `top_k` 只对 SiliconFlow 生效，`reasoning_effort` 只对 DeepSeek 生效；
-- `session_id` 仅回显。
-
-响应：
+请求字段由插件定义；`chat_t2t` 不做校验与改写，只负责选择插件并转发。
+示例响应（由插件返回）：
 
 ```json
 {
@@ -78,39 +73,31 @@ int chat_t2t(const char *json_in, char *json_out);
 
 `setup.json` 通过 `info_lib` 写入以下 `setting`，均使用 `allow_error` 保证幂等：
 
-| 供应商 | key | 默认值 |
-| --- | --- | --- |
-| DeepSeek | `deepseek_app_key` | 占位符，必须替换 |
-| | `deepseek_app_base_url` | `https://api.deepseek.com/anthropic` |
-| | `deepseek_app_model` | `deepseek-flash` |
-| | `deepseek_app_max_tokens` | `4096` |
-| | `deepseek_app_temperature` | `0.7` |
-| | `deepseek_app_system_prompt` | 你是一个乐于助人的中文 AI 助手。 |
-| | `deepseek_app_thinking` | `disabled` |
-| | `deepseek_app_reasoning_effort` | `high` |
-| SiliconFlow | `silicon_app_key` | 占位符，必须替换 |
-| | `silicon_app_base_url` | `https://api.siliconflow.cn/v1` |
-| | `silicon_app_model` | `Qwen/Qwen2.5-7B-Instruct` |
-| | `silicon_app_max_tokens` | `4096` |
-| | `silicon_app_temperature` | `0.7` |
-| | `silicon_app_top_p` | `0.7` |
-| | `silicon_app_topk` | `40`（源码缺省 `50`） |
-| | `silicon_app_system_prompt` | 你是一个乐于助人的中文 AI 助手。 |
+| key | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `ai_supplier` | `enum` | `c39f6e4d-042a-4b3e-bc8d-2a7c3336736c` | 当前插件的 uuid；切换选项即切换插件 |
+| `ai_supplier_plugin_uuid` | `string` | 空 | 供其它方法注册使用，切换选项时写入对应插件 uuid |
 
-`ai_supplier` 由 setting 页面维护，不在本包初始化，避免覆盖用户选择。
+`ai_supplier` 的可选值就是插件 uuid：
+
+| 插件 | uuid |
+| --- | --- |
+| `deepseek` | `c39f6e4d-042a-4b3e-bc8d-2a7c3336736c` |
+| `siliconflow_t2t` | `c8b1acac-2b36-463b-84f7-c2170d31ab63` |
+
+`chat_t2t` 只读取 `ai_supplier`：未设置（或为空）时返回 `500202`，不做默认回退。
+各插件自己的配置（API Key、模型等）由插件包各自的 `setup.json` 维护。
 
 ## 错误码
 
 | 码 | 含义 |
 | --- | --- |
-| `0` | 成功 |
+| `0` | 成功（响应由插件返回，实际以插件 `code` 为准） |
 | `400001` | `json_in` 为空 |
-| `400002` | 请求 JSON 解析失败 |
 | `400003` | 请求不是 UTF-8 |
-| `400004` | 未知供应商 |
-| `400102` | `prompt` / `messages` 没有有效内容 |
-| `500101` | 读取配置、HTTP 调用或响应解析失败 |
+| `500101` | 读取插件信息或调用插件失败 |
 | `500201` | 读取 `info.db.setting` 失败 |
+| `500202` | 未设置 `ai_supplier`（插件 uuid） |
 
 ## 构建与测试
 
@@ -133,7 +120,7 @@ cargo test
 
 `../deepseek/` 与 `../siliconflow_t2t/` 是迁移前的独立包源码，随本仓库保留用于对照与追溯；
 它们不参与本目录 `cloud_lib` 的构建，也不进入 `dytes.json` 的发布产物。
-当前 `src/utils/` 只保留配置读取、错误码、JSON 辅助与供应商定义等通用模块，
-不再包含供应商调用实现。
+当前 `src/utils/` 只保留配置读取、错误码、JSON 辅助、供应商定义与插件查询/调用等
+通用模块，不再包含供应商调用实现。
 
 接口细节见 [docs/ffi.md](docs/ffi.md)。

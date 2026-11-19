@@ -47,6 +47,33 @@ pub fn write_success_json(json_out: *mut c_char, msg: &str, data: Value) -> c_in
     OK
 }
 
+/// 纯文本 -> json_out；超限时写入错误 JSON 并返回 0。
+pub fn write_text(json_out: *mut c_char, text: &str) -> c_int {
+    if json_out.is_null() {
+        return ERR_JSON_OUT_NULL;
+    }
+    let bytes = text.as_bytes();
+    if bytes.len() + 1 > JSON_OUT_BUF_SIZE {
+        return write_error_json(json_out, ERR_JSON_OUT_TOO_LARGE, "输出超过缓冲区大小");
+    }
+    unsafe {
+        std::ptr::copy_nonoverlapping(bytes.as_ptr(), json_out as *mut u8, bytes.len());
+        *json_out.add(bytes.len()) = 0;
+    }
+    OK
+}
+
+/// 从 C 字符串读取纯文本输入。
+pub fn read_text(json_in: *const c_char) -> Result<String, i32> {
+    if json_in.is_null() {
+        return Err(errcode::ERR_JSON_IN_NULL);
+    }
+    unsafe { CStr::from_ptr(json_in) }
+        .to_str()
+        .map(str::to_string)
+        .map_err(|_| errcode::ERR_JSON_UTF8)
+}
+
 /// 从 C 字符串解析 JSON
 #[allow(clippy::not_unsafe_ptr_arg_deref)]
 pub fn parse_json<T>(json_in: *const c_char) -> Result<T, i32>

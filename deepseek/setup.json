@@ -2,12 +2,8 @@
   "version": 1,
   "requests": [
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_key",
         "title": "应用 Key",
@@ -25,12 +21,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_base_url",
         "title": "API 地址",
@@ -48,12 +40,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_model",
         "title": "默认模型",
@@ -71,12 +59,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_max_tokens",
         "title": "最大 Tokens",
@@ -94,12 +78,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_temperature",
         "title": "温度",
@@ -117,12 +97,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_system_prompt",
         "title": "System 提示词",
@@ -140,12 +116,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_thinking",
         "title": "思考模式",
@@ -163,12 +135,8 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_post"
-      },
+      "library": "info_lib",
+      "symbol": "info_post",
       "body": {
         "key": "deepseek_app_reasoning_effort",
         "title": "推理强度",
@@ -186,150 +154,129 @@
       "allow_error": true
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
+      "library": "info_lib",
+      "symbol": "info_post",
+      "body": {
+        "key": "ai_supplier",
+        "title": "AI 对话供应商",
+        "value": "c39f6e4d-042a-4b3e-bc8d-2a7c3336736c",
+        "value_type": "enum",
+        "category": "ai_supplier",
+        "description": "插件 uuid：deepseek=c39f6e4d-042a-4b3e-bc8d-2a7c3336736c；siliconflow_t2t=c8b1acac-2b36-463b-84f7-c2170d31ab63",
+        "note": {
+          "key": "ai_supplier",
+          "language": "default",
+          "title": "AI 供应商",
+          "description": "AI 供应商插件设置"
+        }
       },
+      "allow_error": true
+    },
+    {
+      "library": "info_lib",
+      "symbol": "info_update",
+      "body": {
+        "key": "ai_supplier",
+        "value": "c39f6e4d-042a-4b3e-bc8d-2a7c3336736c"
+      },
+      "allow_error": true
+    },
+    {
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_key",
         "note": {
           "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
+          "language": "en",
+          "title": "DeepSeek Info",
+          "description": "DeepSeek API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_base_url",
         "note": {
           "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
+          "language": "en",
+          "title": "DeepSeek Info",
+          "description": "DeepSeek API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_model",
         "note": {
           "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
+          "language": "en",
+          "title": "DeepSeek Info",
+          "description": "DeepSeek API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_max_tokens",
         "note": {
           "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
+          "language": "en",
+          "title": "DeepSeek Info",
+          "description": "DeepSeek API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_temperature",
         "note": {
           "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
+          "language": "en",
+          "title": "DeepSeek Info",
+          "description": "DeepSeek API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_system_prompt",
         "note": {
           "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
+          "language": "en",
+          "title": "DeepSeek Info",
+          "description": "DeepSeek API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_thinking",
         "note": {
           "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
+          "language": "en",
+          "title": "DeepSeek Info",
+          "description": "DeepSeek API settings"
         }
       }
     },
     {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
+      "library": "info_lib",
+      "symbol": "info_update",
       "body": {
         "key": "deepseek_app_reasoning_effort",
-        "note": {
-          "key": "deepseek_info",
-          "language": "default",
-          "title": "DeepSeek 配置",
-          "description": "DeepSeek API 相关配置"
-        }
-      }
-    },
-    {
-      "url": "http://127.0.0.1:44944/info_lib",
-      "method": "POST",
-      "headers": {
-        "Content-Type": "application/libary",
-        "FFI-Symbol": "info_update"
-      },
-      "body": {
-        "key": "deepseek_app_key",
         "note": {
           "key": "deepseek_info",
           "language": "en",

@@ -10,15 +10,19 @@ use std::os::raw::{c_char, c_int};
 
 use crate::utils::errcode::{self, ERR_JSON_IN_NULL, ERR_JSON_UTF8};
 
-/// 调用方分配的 JSON 输出缓冲区大小（含结尾 NUL）。
-pub const OUT_BUF_SIZE: usize = 65536;
+/// 调用方分配的 JSON 输出缓冲区大小（含结尾 NUL），与库间调用一致为 1 MiB。
+pub const OUT_BUF_SIZE: usize = 1024 * 1024;
 
 /// 写入调用方缓冲区；成功返回 `0`，指针为空返回 `-1`，缓冲区不足返回 `-2`。
 pub fn write_json_out(json_out: *mut c_char, value: &Value) -> c_int {
+    write_text(json_out, &value.to_string())
+}
+
+/// 写入原始 JSON 文本；返回值语义同 [`write_json_out`]。
+pub fn write_text(json_out: *mut c_char, text: &str) -> c_int {
     if json_out.is_null() {
         return -1;
     }
-    let text = value.to_string();
     let bytes = text.as_bytes();
     if bytes.len() + 1 > OUT_BUF_SIZE {
         return -2;
@@ -39,16 +43,21 @@ pub fn write_error(json_out: *mut c_char, code: i32, msg: &str) -> c_int {
     write_json_out(json_out, &errcode::error(code, Some(msg)))
 }
 
-/// 从 C 字符串解析 JSON。
-pub fn parse_json<T: DeserializeOwned>(json_in: *const c_char) -> Result<T, i32> {
+/// 读取调用方传入的 C 字符串。
+pub fn read_input(json_in: *const c_char) -> Result<String, i32> {
     if json_in.is_null() {
         return Err(ERR_JSON_IN_NULL);
     }
-    let body = match unsafe { CStr::from_ptr(json_in) }.to_str() {
-        Ok(body) => body,
-        Err(_) => return Err(ERR_JSON_UTF8),
-    };
-    serde_json::from_str(body).map_err(|_| errcode::ERR_JSON_PARSE)
+    let body = unsafe { CStr::from_ptr(json_in) }
+        .to_str()
+        .map_err(|_| ERR_JSON_UTF8)?;
+    Ok(body.to_string())
+}
+
+/// 从 C 字符串解析 JSON。
+pub fn parse_json<T: DeserializeOwned>(json_in: *const c_char) -> Result<T, i32> {
+    let body = read_input(json_in)?;
+    serde_json::from_str(&body).map_err(|_| errcode::ERR_JSON_PARSE)
 }
 
 #[cfg(test)]
