@@ -4,7 +4,7 @@ use std::collections::{HashMap, HashSet};
 
 use anyhow::Result;
 
-use crate::db::db_query;
+use crate::utils::db::db_query;
 
 /// 供应商配置键（DeepSeek + SiliconFlow）。
 pub const SETTING_KEYS: &[&str] = &[

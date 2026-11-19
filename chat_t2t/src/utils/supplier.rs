@@ -1,7 +1,7 @@
 //! 供应商定义。请求里的 `supplier` 与 `info.db.setting.ai_supplier` 都使用这里
 //! 的代码；未配置时回退 DeepSeek，保持与 chatllm 原有行为一致。
 
-use crate::setting::Settings;
+use crate::utils::setting::Settings;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Supplier {

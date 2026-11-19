@@ -1,11 +1,11 @@
 # cloud_lib
 
 `cloud_lib` 是 Piksel 的统一云端大模型调用库。Rust `cdylib`，由宿主通过
-`POST /cloud_lib` + `FFI-Symbol: chat` 调用，也可以由 chatllm 直接 `dlopen`
+`POST /cloud_lib` + `FFI-Symbol: chat_t2t` 调用，也可以由 chatllm 直接 `dlopen`
 `./libary/cloud_lib.{dll,so,dylib}`。
 
-它合并了原先 `deepseek` 与 `siliconflow_t2t` 两个系统库的调用实现，并接管
-「按 `ai_supplier` 选择供应商」的分发逻辑，对外只暴露一个 FFI 入口 `post_chat`。
+它接管「按 `ai_supplier` 选择供应商」的职责，对外只暴露一个 FFI 入口 `chat_t2t`。
+当前版本暂不提供 chat 调用，调用会返回业务错误 `500101`。
 
 ## 包信息
 
@@ -15,14 +15,14 @@
 | 包名 / 类型 | `cloud_lib` / `sys` |
 | 版本 | `1.0.0` |
 | 产物 | Windows `cloud_lib.dll`、Linux `cloud_lib.so`、macOS `cloud_lib.dylib` |
-| 入口 | `post_chat` |
+| 入口 | `chat_t2t` |
 | 依赖 | `database`（读 `info.db.setting`）、`info_lib`（`setup.json` 写入配置） |
 | 配置前缀 | `deepseek_app_*` / `silicon_app_*` |
 
 ## 调用方式
 
 ```c
-int post_chat(const char *json_in, char *json_out);
+int chat_t2t(const char *json_in, char *json_out);
 ```
 
 - `json_in`：UTF-8 JSON；
@@ -127,12 +127,13 @@ cargo test
 - 供应商实现统一收口到本库；
 - `chatllm` 只加载 `cloud_lib`，不再感知具体供应商库；
 - 原 `deepseek` / `siliconflow_t2t` 包从 `dytescn/chat_plugins` 移出，源码归档在
-  本仓库的 `deepseek/` 与 `siliconflow_t2t/` 目录。
+  本仓库根目录的 `deepseek/` 与 `siliconflow_t2t/` 目录（即本目录 `chat_t2t/` 的同级目录）。
 
 ## 历史实现
 
-`deepseek/` 与 `siliconflow_t2t/` 是迁移前的独立包源码，随本仓库保留用于对照与追溯；
-它们不参与根项目 `cloud_lib` 的构建，也不进入 `dytes.json` 的发布产物。当前统一实现见
-`src/provider/`。
+`../deepseek/` 与 `../siliconflow_t2t/` 是迁移前的独立包源码，随本仓库保留用于对照与追溯；
+它们不参与本目录 `cloud_lib` 的构建，也不进入 `dytes.json` 的发布产物。
+当前 `src/utils/` 只保留配置读取、错误码、JSON 辅助与供应商定义等通用模块，
+不再包含供应商调用实现。
 
 接口细节见 [docs/ffi.md](docs/ffi.md)。

@@ -8,7 +8,7 @@ use serde_json::Value;
 use std::ffi::CStr;
 use std::os::raw::{c_char, c_int};
 
-use crate::errcode::{self, ERR_JSON_IN_NULL, ERR_JSON_UTF8};
+use crate::utils::errcode::{self, ERR_JSON_IN_NULL, ERR_JSON_UTF8};
 
 /// 调用方分配的 JSON 输出缓冲区大小（含结尾 NUL）。
 pub const OUT_BUF_SIZE: usize = 65536;
