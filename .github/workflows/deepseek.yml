@@ -97,7 +97,7 @@ jobs:
           cmake --build build --config Release
 
       - name: Publish with dytes
-        uses: dytescn/dytes@v0.2.9
+        uses: dytescn/dytes@v0.2.10
         with:
           command: publish
           dir: deepseek
