@@ -97,7 +97,7 @@ jobs:
           cmake --build build --config Release
 
       - name: Publish with dytes
-        uses: dytescn/dytes@v0.2.8
+        uses: dytescn/dytes@v0.2.9
         with:
           command: publish
           dir: siliconflow_t2t
